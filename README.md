@@ -1,3 +1,5 @@
-# Blogs
+# Basic GAN
 
-This repository contains content, code and other related materials for my blogs.
+This is a fork of Aadil Hayat's repo that created for one of his blog posts on
+GANs. I will be making some minor changes to the repo as I experiment with
+GANs.
