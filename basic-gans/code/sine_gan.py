@@ -1,12 +1,12 @@
 import tensorflow as tf
 import numpy as np
-from training_data import *
+from sine_training_data import *
 import seaborn as sb
 import matplotlib.pyplot as plt
 sb.set()
 
 def sample_Z(m, n):
-    return np.random.uniform(-1., 1., size=[m, n])
+    return np.random.uniform(-2*np.pi, 2*np.pi, size=[m, n])
 
 def generator(Z,hsize=[16, 16],reuse=False):
     with tf.variable_scope("GAN/Generator",reuse=reuse):
@@ -57,7 +57,7 @@ x_plot = sample_data(n=batch_size)
 f = open('loss_logs.csv','w')
 f.write('Iteration,Discriminator Loss,Generator Loss\n')
 
-for i in range(10001):
+for i in range(3001):
     X_batch = sample_data(n=batch_size)
     Z_batch = sample_Z(batch_size, 2)
 
@@ -74,14 +74,14 @@ for i in range(10001):
     if i%10 == 0:
         f.write("%d,%f,%f\n"%(i,dloss,gloss))
 
-    if i%1000 == 0:
+    if i%100 == 0:
         # Iterations gif
         plt.figure()
         g_plot = sess.run(G_sample, feed_dict={Z: Z_batch})
         xax = plt.scatter(x_plot[:,0], x_plot[:,1])
         gax = plt.scatter(g_plot[:,0],g_plot[:,1])
-        plt.xlim(-60, 60)
-        plt.ylim(-50, 2600)
+        plt.xlim(-3*np.pi, 3*np.pi)
+        plt.ylim(-1, 1)
         plt.legend((xax,gax), ("Real Data","Generated Data"))
         plt.title('Samples at Iteration %d'%i)
         plt.tight_layout()
@@ -94,8 +94,8 @@ for i in range(10001):
         rrg = plt.scatter(rrep_gstep[:,0], rrep_gstep[:,1], alpha=0.5)
         grd = plt.scatter(grep_dstep[:,0], grep_dstep[:,1], alpha=0.5)
         grg = plt.scatter(grep_gstep[:,0], grep_gstep[:,1], alpha=0.5)
-        plt.xlim(-200, 200)
-        plt.ylim(-40, 40)
+        plt.xlim(-3*np.pi, 3*np.pi)
+        plt.ylim(-1, 1)
         plt.legend((rrd, rrg, grd, grg), ("Real Data Before G step","Real Data After G step",
                                "Generated Data Before G step","Generated Data After G step"))
         plt.title('Transformed Features at Iteration %d'%i)
@@ -109,8 +109,8 @@ for i in range(10001):
         rrgc = plt.scatter(np.mean(rrep_gstep[:,0]), np.mean(rrep_gstep[:,1]),s=100, alpha=0.5)
         grdc = plt.scatter(np.mean(grep_dstep[:,0]), np.mean(grep_dstep[:,1]),s=100, alpha=0.5)
         grgc = plt.scatter(np.mean(grep_gstep[:,0]), np.mean(grep_gstep[:,1]),s=100, alpha=0.5)
-        plt.xlim(-50, 50)
-        plt.ylim(-50, 50)
+        plt.xlim(-3*np.pi, 3*np.pi)
+        plt.ylim(-1, 1)
         plt.legend((rrdc, rrgc, grdc, grgc), ("Real Data Before G step","Real Data After G step",
                                "Generated Data Before G step","Generated Data After G step"))
 
